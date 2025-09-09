@@ -1,0 +1,43 @@
+version: "3.9"
+services:
+  app:
+    image: ghcr.io/REPLACE_OWNER/REPLACE_IMAGE:latest
+    env_file: stack.env
+    ports: ["80:80"]
+    depends_on: [db, redis]
+    volumes:
+      - storage-data:/var/www/storage
+    restart: unless-stopped
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db-data:/var/lib/mysql
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+
+  scheduler:
+    image: ghcr.io/REPLACE_OWNER/REPLACE_IMAGE:latest
+    env_file: stack.env
+    depends_on: [app, db, redis]
+    command: php artisan schedule:work
+    restart: unless-stopped
+
+  queue:
+    image: ghcr.io/REPLACE_OWNER/REPLACE_IMAGE:latest
+    env_file: stack.env
+    depends_on: [app, db, redis]
+    command: php artisan queue:work --sleep=1 --tries=3
+    restart: unless-stopped
+
+volumes:
+  db-data:
+  storage-data:

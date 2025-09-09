@@ -10,4 +10,10 @@ export default defineConfig({
         }),
         tailwindcss(),
     ],
+     server: {
+        host: '0.0.0.0',  // Listen on all interfaces inside container
+        hmr: {
+            host: 'localhost'  // Tell browser to connect to localhost for hot module replacement
+        },
+    }
 });

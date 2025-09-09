@@ -1,0 +1,58 @@
+version: "3.9"
+services:
+  app:
+    build: .
+    ports: ["8080:80"]
+    working_dir: /var/www
+    environment:
+      APP_ENV: local
+      APP_DEBUG: "true"
+      DB_HOST: db
+      DB_DATABASE: app
+      DB_USERNAME: app
+      DB_PASSWORD: app
+      CACHE_DRIVER: redis
+      SESSION_DRIVER: redis
+      REDIS_HOST: redis
+      VITE_SERVER_HOST: "localhost" 
+    volumes:
+      - ./:/var/www #Mount the current directory to /var/www in the container for live code updates 
+      - storage-data:/var/www/storage
+    depends_on: [db, redis]
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: app
+      MYSQL_USER: app
+      MYSQL_PASSWORD: app
+    ports: ["3306:3306"]
+    volumes:
+      - db-data:/var/lib/mysql #db-data is a named volume to persist database data
+
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+
+   # Vite dev server (optional; for assets hot-reload)
+  npm:
+    image: node:20
+    working_dir: /var/www
+    command: sh -lc "npm ci && npm run dev -- --host"
+    ports: ["5173:5173"]
+    volumes:
+      - ./:/var/www
+      - /var/www/node_modules
+    depends_on: [app]
+
+  # Composer helper (run on demand)
+  composer:
+    image: composer:2
+    working_dir: /var/www
+    volumes: [ ".:/var/www" ]
+    entrypoint: [ "composer" ]
+
+volumes:
+  db-data:
+  storage-data:
