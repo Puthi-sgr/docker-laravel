@@ -1,0 +1,12 @@
+name: Feature (Container CI)
+on: { push: { branches: ["feature/**"] } }
+
+jobs:
+  ci:
+    uses: Puthi-sgr/puthi-cicd-templates/.github/workflows/container-ci.yml@v1.2
+    with:
+      image_name: ghcr.io/ORG/APP
+      stack: php-laravel
+      build_mode: fast
+    secrets:
+      github_token: ${{ secrets.GITHUB_TOKEN }}

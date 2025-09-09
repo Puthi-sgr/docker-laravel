@@ -1,0 +1,12 @@
+name: Main (Container Build & Push)
+on: { push: { branches: ["main"] } }
+
+jobs:
+  ci:
+    uses: Puthi-sgr/puthi-cicd-templates/.github/workflows/container-ci.yml@v1.2
+    with:
+      image_name: ghcr.io/ORG/APP
+      stack: php-laravel
+      build_mode: full
+    secrets:
+      github_token: ${{ secrets.GITHUB_TOKEN }}
