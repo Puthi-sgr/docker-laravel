@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   app:
-    image: ghcr.io/REPLACE_OWNER/REPLACE_IMAGE:latest
+    image: ghcr.io/REPLACE_OWNER/REPLACE_IMAGE:latest ##The image URL should be replaced with your own 
     env_file: stack.env
     ports: ["80:80"]
     depends_on: [db, redis]

@@ -1,0 +1,22 @@
+name: Deploy (Container)
+
+on:
+  workflow_run:
+    workflows: ["Main (Container Build & Push)"]
+    types: [ "completed" ]
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    uses: Puthi-sgr/puthi-cicd-templates/.github/workflows/container-deploy.yml@v1.2
+    with:
+      working_dir: "/opt/laravel-crud"
+      compose_file: "docker-compose.prod.yml"
+      image_ref: "ghcr.io/ORG/APP:${{ github.sha }}"   # pin exact image
+      health_url: "https://your-domain.com/health"
+    secrets:
+      host:     ${{ secrets.SSH_HOST }}
+      ssh_user: ${{ secrets.SSH_USER }}
+      ssh_key:  ${{ secrets.SSH_KEY }}
+      ghcr_pat: ${{ secrets.GHCR_PAT }}   # PAT with read:packages
