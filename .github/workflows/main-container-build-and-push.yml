@@ -3,7 +3,7 @@ on: { push: { branches: ["main"] } }
 # This workflow will run test, build, and push the image to the registry if everything passed
 jobs:
   ci:
-    uses: Puthi-sgr/puthi-cicd-templates/.github/workflows/container-ci.yml@v1.4
+    uses: puthi-sgr/puthi-cicd-templates/.github/workflows/container-ci.yml@v1.4
     with:
       image_name: ghcr.io/puthi-sgr/docker-laravel
       stack: php-laravel
