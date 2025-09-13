@@ -1,8 +1,8 @@
 version: "3.9"
 services:
   app:
-    image: ghcr.io/REPLACE_OWNER/REPLACE_IMAGE:latest ##The image URL should be replaced with your own 
-    env_file: stack.env
+    image: ${IMAGE_REF} ##The image URL should be replaced with your own 
+    env_file: runtime.prod.env #The image knows to look for a specific key
     ports: ["80:80"]
     depends_on: [db, redis]
     volumes:
@@ -11,13 +11,9 @@ services:
 
   db:
     image: mysql:8.0
-    environment:
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER: ${DB_USERNAME}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
+    env_file: runtime.prod.env        # <-- use env_file, not ${...} substitution
     volumes:
-      - db-data:/var/lib/mysql
+      - db-data:/var/lib/mysql # <-- persist DB data store in docker filesystem volume
     restart: unless-stopped
 
   redis:
@@ -25,15 +21,15 @@ services:
     restart: unless-stopped
 
   scheduler:
-    image: ghcr.io/REPLACE_OWNER/REPLACE_IMAGE:latest
-    env_file: stack.env
+    image: ${IMAGE_REF}
+    env_file: runtime.prod.env
     depends_on: [app, db, redis]
     command: php artisan schedule:work
     restart: unless-stopped
 
   queue:
-    image: ghcr.io/REPLACE_OWNER/REPLACE_IMAGE:latest
-    env_file: stack.env
+    image: ${IMAGE_REF}
+    env_file: runtime.prod.env
     depends_on: [app, db, redis]
     command: php artisan queue:work --sleep=1 --tries=3
     restart: unless-stopped

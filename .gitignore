@@ -6,6 +6,7 @@
 .phpactor.json
 .phpunit.result.cache
 .stack.env
+runtime.prod.env
 /.fleet
 /.idea
 /.nova

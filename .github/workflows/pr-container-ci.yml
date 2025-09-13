@@ -3,7 +3,7 @@ on: { pull_request: { branches: ["main"] } }
 
 jobs:
   ci:
-    uses: Puthi-sgr/puthi-cicd-templates/.github/workflows/container-ci.yml@v1.2
+    uses: Puthi-sgr/puthi-cicd-templates/.github/workflows/container-ci.yml@v1.4
     with:
       image_name: ghcr.io/puthi-sgr/docker-laravel #image path 
       stack: php-laravel
