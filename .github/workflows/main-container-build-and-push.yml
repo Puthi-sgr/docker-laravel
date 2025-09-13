@@ -1,6 +1,10 @@
 name: Main (Container Build & Push)
 on: { push: { branches: ["main"] } }
 # This workflow will run test, build, and push the image to the registry if everything passed
+# Add this permissions block
+permissions:
+  packages: write
+  contents: read
 jobs:
   ci:
     uses: puthi-sgr/puthi-cicd-templates/.github/workflows/container-ci.yml@v1.9
