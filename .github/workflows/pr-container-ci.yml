@@ -1,12 +1,10 @@
 name: PR (Container CI) no push just build
 on: { pull_request: { branches: ["main"] } }
-
+##This workflow will run test and build the image on every PR to main branch, but will not push the image to the registry
 jobs:
   ci:
-    uses: Puthi-sgr/puthi-cicd-templates/.github/workflows/container-ci.yml@v1.7
+    uses: Puthi-sgr/puthi-cicd-templates/.github/workflows/container-ci.yml@v1.9
     with:
       image_name: ghcr.io/puthi-sgr/docker-laravel #image path 
       stack: php-laravel
       build_mode: full
-    secrets:
-      github_token: ${{ secrets.GITHUB_TOKEN }}

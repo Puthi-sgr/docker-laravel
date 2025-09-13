@@ -3,10 +3,8 @@ on: { push: { branches: ["feature/**"] } }
 
 jobs:
   ci:
-    uses: puthi-sgr/puthi-cicd-templates/.github/workflows/container-ci.yml@v1.7
+    uses: puthi-sgr/puthi-cicd-templates/.github/workflows/container-ci.yml@v1.9
     with:
       image_name: ghcr.io/puthi-sgr/docker-laravel
       stack: php-laravel
       build_mode: fast
-    secrets:
-      github_token: ${{ secrets.GITHUB_TOKEN }}

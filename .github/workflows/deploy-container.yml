@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    uses: Puthi-sgr/puthi-cicd-templates/.github/workflows/container-deploy.yml@v1.7
+    uses: Puthi-sgr/puthi-cicd-templates/.github/workflows/container-deploy.yml@v1.9
     with:
       working_dir: "/opt/laravel-crud"
       compose_file: "docker-compose.prod.yml"
