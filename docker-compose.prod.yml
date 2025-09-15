@@ -13,7 +13,7 @@ services:
     image: mysql:8.0
     env_file: runtime.prod.env        # <-- use env_file, not ${...} substitution
     volumes:
-      - db-data:/var/lib/mysql # <-- persist DB data store in docker filesystem volume
+      - db-data:/var/lib/mysql 
     restart: unless-stopped
 
   redis:
