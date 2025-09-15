@@ -21,7 +21,7 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     uses: Puthi-sgr/puthi-cicd-templates/.github/workflows/container-deploy.yml@v1.9
     with:
-      working_dir: "/opt/laravel-crud"
+      working_dir: "/opt/docker-laravel"
       compose_file: "docker-compose.prod.yml"
       # Correctly reference the triggering workflow's commit SHA
       image_ref: "ghcr.io/puthi-sgr/docker-laravel:sha-${{ needs.prepare.outputs.short_sha }}"
