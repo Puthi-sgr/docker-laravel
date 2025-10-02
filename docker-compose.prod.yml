@@ -2,6 +2,7 @@ version: "3.9"
 services:
   app:
     image: ${IMAGE_REF} ##The image URL should be replaced with your own
+    working_dir: /var/www
     env_file: runtime.prod.env #The image knows to look for a specific key
     ports:
       - "127.0.0.1:8081:80"
@@ -23,6 +24,7 @@ services:
 
   scheduler:
     image: ${IMAGE_REF}
+    working_dir: /var/www
     env_file: runtime.prod.env
     depends_on: [app, db, redis]
     command: php artisan schedule:work
@@ -30,6 +32,7 @@ services:
 
   queue:
     image: ${IMAGE_REF}
+    working_dir: /var/www
     env_file: runtime.prod.env
     depends_on: [app, db, redis]
     command: php artisan queue:work --sleep=1 --tries=3
