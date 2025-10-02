@@ -1,9 +1,10 @@
 version: "3.9"
 services:
   app:
-    image: ${IMAGE_REF} ##The image URL should be replaced with your own 
+    image: ${IMAGE_REF} ##The image URL should be replaced with your own
     env_file: runtime.prod.env #The image knows to look for a specific key
-    ports: ["80:80"]
+    ports:
+      - "127.0.0.1:8081:80"
     depends_on: [db, redis]
     volumes:
       - storage-data:/var/www/storage
@@ -11,9 +12,9 @@ services:
 
   db:
     image: mysql:8.0
-    env_file: runtime.prod.env        # <-- use env_file, not ${...} substitution
+    env_file: runtime.prod.env # <-- use env_file, not ${...} substitution
     volumes:
-      - db-data:/var/lib/mysql 
+      - db-data:/var/lib/mysql
     restart: unless-stopped
 
   redis:
