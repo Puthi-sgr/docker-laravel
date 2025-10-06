@@ -1,6 +1,14 @@
 # syntax=docker/dockerfile:1.7
 
- 
+# ----- Composer deps stage -----
+FROM composer:2 AS vendor
+WORKDIR /app
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --no-interaction --prefer-dist --no-progress --no-ansi --no-scripts
+# (copy source of the build from home to the /app in the docker file system  to allow optimized autoload)
+COPY . /app 
+RUN composer dump-autoload -o
+
 # ----- Frontend assets stage (Vite) -----
 FROM node:20 AS assets
 WORKDIR /app
