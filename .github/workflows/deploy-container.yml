@@ -29,10 +29,23 @@ jobs:
       env_remote_path: "/opt/docker-laravel/runtime.prod.env"
       health_url: "https://puthidocker.eltheocapital.com/health"
       # Optional, only for Laravel:
-      post_rollout_cmd: "docker compose -f docker-compose.prod.yml exec -T app php artisan migrate --force"
+      post_rollout_cmd: >
+        docker compose -f docker-compose.prod.yml exec -T -w /var/www app
+        bash -lc 'set -euo pipefail;
+          rm -f bootstrap/cache/*.php || true;
+          mkdir -p storage/logs bootstrap/cache;
+          chown -R www-data:www-data storage bootstrap/cache || true;
+          chmod -R ug+rw storage bootstrap/cache || true;
+          php artisan config:clear;
+          php artisan route:clear || true;  # optional
+          php artisan view:clear  || true;  # optional
+          php artisan migrate --force;
+          php artisan config:cache;
+          php artisan storage:link || true
+        '
     secrets:
-      host:            ${{ secrets.SSH_HOST }}
-      ssh_user:        ${{ secrets.SSH_USER }}
-      ssh_key:         ${{ secrets.SSH_KEY }}
-      ghcr_pat:        ${{ secrets.GHCR_PAT }}
+      host: ${{ secrets.SSH_HOST }}
+      ssh_user: ${{ secrets.SSH_USER }}
+      ssh_key: ${{ secrets.SSH_KEY }}
+      ghcr_pat: ${{ secrets.GHCR_PAT }}
       env_content_b64: ${{ secrets.PROD_ENV_B64 }}
