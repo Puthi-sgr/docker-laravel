@@ -27,7 +27,7 @@ jobs:
       image_ref: "ghcr.io/puthi-sgr/docker-laravel:sha-${{ needs.prepare.outputs.short_sha }}"
       manage_env: true
       env_remote_path: "/opt/docker-laravel/runtime.prod.env"
-      health_url: "https://your-domain.com/health"
+      health_url: "https://puthidocker.eltheocapital.com/health"
       # Optional, only for Laravel:
       post_rollout_cmd: "docker compose -f docker-compose.prod.yml exec -T app php artisan migrate --force"
     secrets:

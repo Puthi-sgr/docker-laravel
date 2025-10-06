@@ -2,7 +2,11 @@
 vendor
 node_modules
 .env
+runtime.prod.env
+runtime.prod.env.b64
 storage/logs
 storage/framework/cache/*
 storage/framework/sessions/*
 storage/framework/views/*
+docker-compose.dev.yml
+docker-compose.prod.yml
