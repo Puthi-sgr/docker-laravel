@@ -34,13 +34,11 @@ jobs:
         bash -lc 'set -euo pipefail;
           rm -f bootstrap/cache/*.php || true;
           mkdir -p storage/logs bootstrap/cache;
-          chown -R www-data:www-data storage bootstrap/cache || true;
-          chmod -R ug+rw storage bootstrap/cache || true;
+          chown -R www-data:www-data storage bootstrap/cache;
+          chmod -R ug+rw storage bootstrap/cache;
           php artisan config:clear;
-          php artisan route:clear || true;  # optional
-          php artisan view:clear  || true;  # optional
-          php artisan migrate --force;
           php artisan config:cache;
+          php artisan migrate --force;
           php artisan storage:link || true
         '
     secrets:

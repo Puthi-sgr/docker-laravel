@@ -42,6 +42,9 @@ RUN a2dissite 000-default && a2ensite 000-laravel
 
 # PHP config
 COPY docker/php.ini /usr/local/etc/php/conf.d/php-prod.ini
+
+# Ensure all subsequent paths operate inside the app tree
+WORKDIR /var/www
 # App code + vendor + built assets
 COPY --chown=www-data:www-data . /var/www
 COPY --from=vendor --chown=www-data:www-data /app/vendor /var/www/vendor
@@ -49,7 +52,8 @@ COPY --from=assets --chown=www-data:www-data /app/public/build /var/www/public/b
 
 # Writable dirs
 RUN mkdir -p storage bootstrap/cache \
- && chown -R www-data:www-data storage bootstrap/cache
+ && chown -R www-data:www-data storage bootstrap/cache \
+&& chmod -R ug+rw            storage bootstrap/cache
 
 USER www-data
 EXPOSE 80
