@@ -41,6 +41,7 @@ jobs:
           php "$ARTISAN" migrate --force
           php "$ARTISAN" config:cache
           php "$ARTISAN" storage:link || true
+        '
 
     secrets:
       host: ${{ secrets.SSH_HOST }}
