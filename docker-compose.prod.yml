@@ -1,4 +1,3 @@
-version: "3.9"
 services:
   app:
     image: ${IMAGE_REF} ##The image URL should be replaced with your own
@@ -28,6 +27,8 @@ services:
     env_file: runtime.prod.env
     depends_on: [app, db, redis]
     command: php artisan schedule:work
+    volumes:
+      - storage-data:/var/www/storage
     restart: unless-stopped
 
   queue:
@@ -36,6 +37,8 @@ services:
     env_file: runtime.prod.env
     depends_on: [app, db, redis]
     command: php artisan queue:work --sleep=1 --tries=3
+    volumes:
+      - storage-data:/var/www/storage # ← mount storage for failed_jobs.log
     restart: unless-stopped
 
 volumes:
