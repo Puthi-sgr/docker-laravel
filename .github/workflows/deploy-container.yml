@@ -31,16 +31,12 @@ jobs:
       # Optional, only for Laravel:
       post_rollout_cmd: >
         docker compose -f docker-compose.prod.yml exec -T app bash -lc '
-          set -Eeuo pipefail
-          if [ -f /var/www/artisan ]; then
-            ARTISAN=/var/www/artisan
-          elif [ -f /var/www/html/artisan ]; then
-            ARTISAN=/var/www/html/artisan
-          else
-            echo "artisan not found at /var/www or /var/www/html"; exit 1
+          set -e
+          ARTISAN=/var/www/artisan
+          if [ ! -f "$ARTISAN" ]; then
+            echo "ERROR: $ARTISAN not found. Contents of /var/www:"; ls -la /var/www; exit 1;
           fi
-          CACHE_DIR="$(dirname "$ARTISAN")/bootstrap/cache"
-          rm -f "$CACHE_DIR"/*.php || true
+          rm -f /var/www/bootstrap/cache/*.php || true
           php "$ARTISAN" config:clear
           php "$ARTISAN" migrate --force
           php "$ARTISAN" config:cache
