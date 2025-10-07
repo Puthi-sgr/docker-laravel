@@ -30,16 +30,23 @@ jobs:
       health_url: "https://puthidocker.eltheocapital.com/health"
       # Optional, only for Laravel:
       post_rollout_cmd: >
-        docker compose -f docker-compose.prod.yml exec -T app
-        bash -lc '
-          set -e;
-          ARTISAN=/var/www/artisan; [ -f "$ARTISAN" ] || ARTISAN=/var/www/html/artisan;
-          rm -f $(dirname "$ARTISAN")/bootstrap/cache/*.php || true;
-          php "$ARTISAN" config:clear;
-          php "$ARTISAN" migrate --force;
-          php "$ARTISAN" config:cache;
+        docker compose -f docker-compose.prod.yml exec -T app bash -lc '
+          set -Eeuo pipefail
+          if [ -f /var/www/artisan ]; then
+            ARTISAN=/var/www/artisan
+          elif [ -f /var/www/html/artisan ]; then
+            ARTISAN=/var/www/html/artisan
+          else
+            echo "artisan not found at /var/www or /var/www/html"; exit 1
+          fi
+          CACHE_DIR="$(dirname "$ARTISAN")/bootstrap/cache"
+          rm -f "$CACHE_DIR"/*.php || true
+          php "$ARTISAN" config:clear
+          php "$ARTISAN" migrate --force
+          php "$ARTISAN" config:cache
           php "$ARTISAN" storage:link || true
         '
+
     secrets:
       host: ${{ secrets.SSH_HOST }}
       ssh_user: ${{ secrets.SSH_USER }}
