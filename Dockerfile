@@ -51,9 +51,9 @@ COPY --from=vendor --chown=www-data:www-data /app/vendor /var/www/vendor
 COPY --from=assets --chown=www-data:www-data /app/public/build /var/www/public/build
 
 # Writable dirs
-RUN mkdir -p storage bootstrap/cache \
+RUN rm -f bootstrap/cache/*.php || true \
+ && mkdir -p storage bootstrap/cache \
  && chown -R www-data:www-data storage bootstrap/cache \
-&& chmod -R ug+rw            storage bootstrap/cache
-
+ && chmod -R ug+rw            storage bootstrap/cache
 USER www-data
 EXPOSE 80
