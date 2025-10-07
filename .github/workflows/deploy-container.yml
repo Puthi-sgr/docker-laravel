@@ -29,7 +29,7 @@ jobs:
       env_remote_path: "/opt/docker-laravel/runtime.prod.env"
       health_url: "https://puthidocker.eltheocapital.com/health"
       # Optional, only for Laravel:
-      post_rollout_cmd: >
+      post_rollout_cmd: |
         docker compose -f docker-compose.prod.yml exec -T app bash -lc '
           set -eo pipefail
           ARTISAN=/var/www/artisan
