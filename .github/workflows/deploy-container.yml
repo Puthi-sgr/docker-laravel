@@ -32,15 +32,14 @@ jobs:
       post_rollout_cmd: |
         docker compose -f docker-compose.prod.yml exec -T app bash -lc '
           set -eo pipefail
-          ARTISAN=/var/www/artisan
-          if [ ! -f "$ARTISAN" ]; then
-            echo "ERROR: $ARTISAN not found. Listing /var/www:"; ls -la /var/www; exit 1;
+          if [ ! -f "/var/www/artisan" ]; then
+            echo "ERROR: /var/www/artisan not found. Listing /var/www:"; ls -la /var/www; exit 1;
           fi
           rm -f /var/www/bootstrap/cache/*.php || true
-          php "$ARTISAN" config:clear
-          php "$ARTISAN" migrate --force
-          php "$ARTISAN" config:cache
-          php "$ARTISAN" storage:link || true
+          php "/var/www/artisan" config:clear
+          php "/var/www/artisan" migrate --force
+          php "/var/www/artisan" config:cache
+          php "/var/www/artisan" storage:link || true
         '
 
     secrets:
